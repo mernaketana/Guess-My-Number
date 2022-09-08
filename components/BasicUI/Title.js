@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: Colors.dark,
         textAlign: 'center',
-        paddingTop: 60      ,
+        paddingTop: 30      ,
         paddingBottom: 10,
         borderBottomWidth: 2,
         borderBottomColor: Colors.dark,

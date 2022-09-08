@@ -17,21 +17,24 @@ export default function PrimaryButton({children, onPress}){
 
 const styles = StyleSheet.create({
     outerContainer: {
-        borderRadius: 30,
+        borderRadius: 40,
         margin: 4,
         overflow: 'hidden',
     },
     innerContainer: {
-        backgroundColor: Colors.light,
+        backgroundColor: Colors.dark,
         paddingHorizontal: 16,
         paddingVertical: 6,
         elevation: 2,
-        height: 40
+        height: 50,
+        alignContent: 'center',
+        alignItems: 'center'
     },
     text: {
-        color: Colors.dark,
+        color: Colors.light,
         textAlign: 'center',
-        fontSize: 18
+        fontSize: 22,
+        fontWeight: 'bold'
     },
     pressedIOS: {
         opacity: 0.5

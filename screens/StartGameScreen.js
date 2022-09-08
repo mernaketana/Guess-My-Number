@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { View, TextInput, Alert } from "react-native";
+import { View, TextInput, Alert, Text } from "react-native";
 import { StyleSheet } from "react-native";
 import PrimaryButton from "../components/BasicUI/PrimaryButton";
+import Title from "../components/BasicUI/Title";
 import Colors from "../constants/colors"
 
 export default function StartGameScreen({startGameWithNumber}){
@@ -29,7 +30,9 @@ export default function StartGameScreen({startGameWithNumber}){
 
     return(
 <View style={styles.inputContainer}>
-    <TextInput value={userInput} style={styles.textInput} maxLength={2} keyboardType='number-pad' autoCapitalize='none' autoCorrect={false} onChangeText={userInputHandler}/>
+    <Title title={'Guess My Number'}/>
+    <Text style={styles.text}>Enter a number!</Text>
+    <TextInput placeholder="00" placeholderTextColor={Colors.light} value={userInput} style={styles.textInput} maxLength={2} keyboardType='number-pad' autoCapitalize='none' autoCorrect={false} onChangeText={userInputHandler}/>
     <View style={styles.buttonsContainer}>
         <View style={styles.singleButton}>
             <PrimaryButton onPress={resetUserInput}>Reset</PrimaryButton>
@@ -38,12 +41,14 @@ export default function StartGameScreen({startGameWithNumber}){
             <PrimaryButton onPress={confirmUserInput}>Confirm</PrimaryButton>
         </View>
     </View>
+    <View style={styles.spacer}/>
 </View>
     );
 };
 
 const styles = StyleSheet.create({
     inputContainer: {
+        flex: 1,
         alignContent: 'center',
         alignItems: 'center',
         padding: 16,
@@ -56,6 +61,8 @@ const styles = StyleSheet.create({
         shadowRadius: 6
     },
     textInput:{
+        marginTop: 20,
+        marginBottom: 25,
         height: 50,
         width: 50,
         fontSize: 32, 
@@ -71,5 +78,10 @@ const styles = StyleSheet.create({
     },
     singleButton: {
         flex: 1,
+    },
+    text: {
+        marginTop: 20,
+        color: Colors.dark,
+        fontWeight: 'bold',
     }
 });
