@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
         elevation: 2,
         height: 50,
         alignContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     text: {
         color: Colors.light,

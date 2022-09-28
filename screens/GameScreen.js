@@ -1,29 +1,29 @@
-import {  View, Text } from "react-native"
-import { useState, useEffect } from "react";
-import { StyleSheet, Alert } from "react-native";
-import * as Device from 'expo-device';
+import {  View, Text, FlatList } from "react-native"
+import { useEffect, useState } from "react";
+import { StyleSheet, Alert, useWindowDimensions } from "react-native";
+import {Ionicons} from "@expo/vector-icons";
 import Title from "../components/BasicUI/Title";
 import PhoneGuess from "../components/GameRelatedUI/PhoneGuess";
 import PrimaryButton from "../components/BasicUI/PrimaryButton";
 import Colors from "../constants/colors";
+import LoggedGuess from "../components/GameRelatedUI/LoggedGuess";
 
-export default function GameScreen({userInput, onGameOver}){
+let minBoundary = 1;
+let maxBoundary = 100;
 
-    const deviceName = Device.deviceName;
-    let minBoundary = 1;
-    let maxBoundary = 100;
+export default function GameScreen({userInput, onGameOver, deviceName, numOfRounds}){   
 
     const initialGuess = guessNumber(1, 100, userInput);
 
-    const [currentGuess, setCurrentGuess]  = useState(initialGuess);  
+    const [currentGuess, setCurrentGuess]  = useState(initialGuess);
+    const [roundGuesses, setRoundGuesses] = useState([initialGuess]); 
 
-    // useEffect is used whenever we want to make a change in the ui based on some functionality with dependencies.
-    // In our case whenever the current guess, the user input or the onGameOver function are changed.
+    const {height, width} = useWindowDimensions();
+
     useEffect(() => {
-        if (currentGuess == userInput){
-            onGameOver();
-        }
-    }, [currentGuess, userInput, onGameOver]);
+        minBoundary = 1;
+        maxBoundary = 100;
+    }, []);
 
     function newGuess(direction){
         if((direction === 'lower' && currentGuess < userInput) || (direction === 'greater' && currentGuess > userInput)){
@@ -37,51 +37,45 @@ export default function GameScreen({userInput, onGameOver}){
             minBoundary = currentGuess + 1;
         }
         const newRandomNum = guessNumber(minBoundary, maxBoundary, currentGuess);
-        setCurrentGuess(newRandomNum);
+        if(newRandomNum == userInput){
+            onGameOver(roundGuesses.length);
+        }
+        else{           
+            setCurrentGuess(newRandomNum);
+            setRoundGuesses(prevRoundGuesses => [...prevRoundGuesses, newRandomNum]);
+        }
     }
 
+    const marginTopDistance = width > 500 ? 90 : 70;
+    const heightLandscape = width > 500 ? 217 : '100%';
+    const direction = width > 500 ? 'row' : 'column';
+
     return (
-        <View style={styles.screen}>
+        <View style={[styles.screen, {marginTop: marginTopDistance, maxHeight: heightLandscape, flexDirection: direction}]}>
+            <View style={styles.firstContainer}>
             <Title title={deviceName + '\'s guess'}/>
             <PhoneGuess number={currentGuess} />
             <Text style={styles.text}>Higher or Lower?</Text>
             <View style={styles.buttonsContainer}>
                 <View style={styles.singleButton}>
-                    <PrimaryButton onPress={newGuess.bind(this, 'greater')}>+</PrimaryButton>
+                    <PrimaryButton onPress={newGuess.bind(this, 'greater')}>
+                        <Ionicons name="md-add" size={24} color="white"/>
+                    </PrimaryButton>
                 </View>
                 <View style={styles.singleButton}>
-                    <PrimaryButton onPress={newGuess.bind(this, 'lower')}>-</PrimaryButton>
+                    <PrimaryButton onPress={newGuess.bind(this, 'lower')}>
+                        <Ionicons name="md-remove" size={24} color="white" style={styles.icon}/>
+                    </PrimaryButton>
                 </View>
             </View>
+            </View>
+            <FlatList data={roundGuesses} renderItem={roundGuess => <LoggedGuess roundNumber={roundGuess.index} guess={roundGuess.item} deviceName={deviceName}/>} keyExtractor={item => item} style={{flex: 1, height: 350, marginVertical: 50}}/>
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        padding: 24,
-        marginTop: 70,
-        alignItems: 'center'
-    },
-    buttonsContainer: {
-        flexDirection: 'row',
-            
-    },
-    singleButton: {
-        width: '30%',
-    },
-    text: {
-        color: Colors.dark,
-        marginBottom: 20,
-        fontSize: 20,
-        fontWeight: 'bold'
-    }
-});
-
 function guessNumber(min, max, exclude){
     const randomNum = Math.floor(Math.random() * (max - min)) + min;
-
     if(randomNum === exclude){
         return guessNumber(min, max, exclude);
     }
@@ -89,3 +83,29 @@ function guessNumber(min, max, exclude){
         return randomNum;
     }
 };
+
+const styles = StyleSheet.create({
+    screen: {
+        flex: 1,
+        padding: 20,       
+        alignItems: 'center'
+    },
+    firstContainer: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    buttonsContainer: {
+        flexDirection: 'row',            
+    },
+    singleButton: {
+        width: '30%',
+        flex: 1,
+    },
+    text: {
+        color: Colors.dark,
+        marginBottom: 20,
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+
+});

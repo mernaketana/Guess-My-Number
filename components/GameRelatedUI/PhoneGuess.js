@@ -12,7 +12,7 @@ export default function PhoneGuess({number}){
 const styles = StyleSheet.create({
     container: {
         padding: 24,
-        margin: 24,
+        margin: 9,
         alignItems: 'center',
         justifyContent: 'center',
         alignContent: 'center'
