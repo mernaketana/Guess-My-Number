@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Text } from "react-native";
+import { Text, Platform } from "react-native";
 import Colors from "../../constants/colors"
 
 export default function Title({title}){
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingTop: 30      ,
         paddingBottom: 10,
-        borderBottomWidth: 2,
+        borderBottomWidth: Platform.select({ios: 0, android: 2}), // Platform.OS === 'android' ? 2 : 0,
         borderBottomColor: Colors.dark,
         maxWidth: '90%',
         width: 300

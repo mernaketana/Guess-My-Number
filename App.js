@@ -1,4 +1,5 @@
 import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
 import * as Device from 'expo-device';
@@ -32,13 +33,16 @@ export default function App() {
   }
 
   return (
-    <LinearGradient colors={['#35D6ED', '#65DDEF', '#7AE5F5', '#97EBF4', '#C9F6FF']} style={styles.container}>
-      <ImageBackground source={require('./assets/images/background.png')} style={styles.container} imageStyle={ startGameWithUserNumber != null ? styles.imageGame : styles.imageStart} resizeMode='contain'>
-      <SafeAreaView style={styles.container}>
-        {startGameWithUserNumber != null ? gameIsOver? <EndGameScreen phoneName={deviceName} roundsNumber={numOfRounds} userInput={startGameWithUserNumber} onNewGame={newGameHandler}/> : <GameScreen userInput={startGameWithUserNumber} onGameOver={gameOverHandler} deviceName={deviceName}/> : <StartGameScreen startGameWithNumber={startGameHandler}/>}
-      </SafeAreaView>
-      </ImageBackground>
-    </LinearGradient>
+    <>
+      <StatusBar style='inverted'/>
+      <LinearGradient colors={['#35D6ED', '#65DDEF', '#7AE5F5', '#97EBF4', '#C9F6FF']} style={styles.container}>
+        <ImageBackground source={require('./assets/images/background.png')} style={styles.container} imageStyle={ startGameWithUserNumber != null ? styles.imageGame : styles.imageStart} resizeMode='contain'>
+        <SafeAreaView style={styles.container}>
+          {startGameWithUserNumber != null ? gameIsOver? <EndGameScreen phoneName={deviceName} roundsNumber={numOfRounds} userInput={startGameWithUserNumber} onNewGame={newGameHandler}/> : <GameScreen userInput={startGameWithUserNumber} onGameOver={gameOverHandler} deviceName={deviceName}/> : <StartGameScreen startGameWithNumber={startGameHandler}/>}
+        </SafeAreaView>
+        </ImageBackground>
+      </LinearGradient>
+    </>
   );
 }
 
